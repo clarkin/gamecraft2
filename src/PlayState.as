@@ -12,6 +12,8 @@ package
 		private var bird:Bird;
 		private var sky:FlxSprite;
 		private var sea:FlxSprite;
+		private var fishGroup:FlxGroup;
+		private var fishTimer:Number = 0;
 		
 		override public function create():void
 		{
@@ -45,15 +47,41 @@ package
 			FlxG.watch(bird, "in_sky", "bird.in_sky");
 			FlxG.watch(bird, "in_sea", "bird.in_sea");
 			
+			fishGroup = new FlxGroup(100);
+			
 			add(sky);
 			add(sea);
 			add(bird);
+			add(fishGroup);
 		}
 		
 		override public function update():void
 		{
-			//FlxG.overlap(sky, bird, birdInSky);
-			//FlxG.overlap(sea, bird, birdInSea);
+			
+			generateFish();
+			checkSkySea();
+			
+			super.update();
+		}
+		
+		private function generateFish():void {
+				fishTimer += FlxG.elapsed;
+				if (fishTimer > 5) {
+					fishTimer = FlxMath.randFloat(0, 4);
+					
+					addFish();
+				}
+				
+		}
+		
+		private function addFish():void {
+			var newFish:Fish = new Fish(FlxMath.rand(0, 800), FlxMath.rand(240, 600), "bluefish");
+			
+			//newFish.play("appear");
+			fishGroup.add(newFish);
+		}
+		
+		private function checkSkySea():void {
 			if (bird.y >= (sky.height + bird.height / 2) && bird.in_sky)
 				bird.nowInSea();
 			else if (bird.y <= (sky.height - bird.height / 2) && bird.in_sea)
@@ -63,18 +91,7 @@ package
 			{
 				FlxG.switchState(new MenuState);
 			}
-			
-			super.update();
 		}
 		
-		public function birdInSky(sky:FlxSprite, bird:Bird):void {
-			if (bird.in_sea)
-				bird.nowInSky();
-		}
-		
-		public function birdInSea(sea:FlxSprite, bird:Bird):void {
-			if (bird.in_sky)
-				bird.nowInSea();
-		}
 	}
 }

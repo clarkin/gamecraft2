@@ -1,0 +1,106 @@
+package  
+{
+	import org.flixel.*;
+	import org.flixel.plugin.photonstorm.*;
+	
+	public class Fish extends FlxSprite
+	{
+		[Embed(source = "../assets/bluefish_31x31.png")] private var bluefishPNG:Class;
+		
+		public static const FLAP_X:Number = 100;
+		public static const FLAP_Y:Number = 20;
+		public static const DRAG:Number = 30;
+		
+		private var appearing:Boolean = true;
+		private var moveTimer:Number = 0;
+		
+		public function Fish(X:Number = 0, Y:Number = 0, type:String = "bluefish") 
+		{
+			super(X, Y);
+			
+			switch (type) {
+				case "bluefish":
+				//width = 31;
+				//height = 31;
+				loadGraphic(bluefishPNG, true, true, 31, 31);
+				addAnimation("stop", [0], 0, true);
+				addAnimation("appear", [4, 5, 6, 7], 20, false);
+				addAnimation("blink", [0, 1, 2, 3], 20, false);
+			}
+			
+			//width = 32;
+			//height = 32;
+			elasticity = 0.2;
+			//maxVelocity.y = 400;
+			//maxVelocity.x = 200;
+			
+			if (FlxMath.rand(1, 3) == 1)
+				facing = LEFT;
+			else 
+				facing = RIGHT;
+		}
+		
+		
+		override public function update():void
+		{
+			if (this.finished) {
+				play("stop");
+				appearing = false;
+			}
+			
+			if (appearing) {
+				play("appear"); 
+			} else {
+				checkMove();
+			}
+			
+			checkBounds();
+			
+			super.update();
+		}
+		
+		
+		
+		private function checkMove():void {
+			moveTimer += FlxG.elapsed;
+			if (moveTimer > 5) {
+				moveTimer = FlxMath.randFloat( -5, 4);
+				
+				var down:int = 1;
+				if (Math.floor(Math.random() * 2) == 1)
+					down = -1;
+				var right:int = 1;
+				facing = RIGHT;
+				if (Math.floor(Math.random() * 2) == 1) {
+					right = -1;
+					facing = LEFT;
+				}	
+				
+				this.velocity.x += right * (Math.floor(Math.random() * FLAP_X) + DRAG);
+				this.velocity.y += down * (Math.floor(Math.random() * FLAP_Y) + DRAG);
+				this.drag.x = DRAG;
+				this.drag.y = DRAG;
+			}
+		}
+		
+		private function checkBounds():void {
+			if (y < 208) {
+				y = 208;
+			} else if (y > FlxG.height - this.height) {
+				y = FlxG.height - this.height;
+			}
+				
+			if (x < 0) {
+				x = 0;
+				velocity.x = -velocity.x * elasticity;
+				facing = RIGHT;
+			} else if (x > FlxG.width - this.width) {
+				x = FlxG.width - this.width;
+				velocity.x = -velocity.x * elasticity;
+				facing = LEFT;
+			}
+		}
+		
+	}
+
+}

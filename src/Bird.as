@@ -57,7 +57,7 @@ package
 		private function checkFlap():void {
 			if (FlxG.keys.justReleased("SPACE"))
 			{				
-				play("flap");
+				play("flap", true);
 				velocity.y -= FLAP_Y;
 				if (facing == LEFT)
 					velocity.x -= FLAP_X;
@@ -67,17 +67,17 @@ package
 		}
 		
 		private function checkBounds():void {
-			if (y <= 0) {
+			if (y < 0) {
 				y = 0;
-			} else if (y >= FlxG.height - this.height) {
+			} else if (y > FlxG.height - this.height) {
 				y = FlxG.height - this.height;
 			}
 				
-			if (x <= 0) {
+			if (x < 0) {
 				x = 0;
 				velocity.x = -velocity.x * ELASTICITY;
 				facing = RIGHT;
-			} else if (x >= FlxG.width - this.width) {
+			} else if (x > FlxG.width - this.width) {
 				x = FlxG.width - this.width;
 				velocity.x = -velocity.x * ELASTICITY;
 				facing = LEFT;
