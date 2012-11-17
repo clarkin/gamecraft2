@@ -23,8 +23,8 @@ package
 		override public function create():void
 		{
 			//FlxG.visualDebug = true;
-			FlxG.camera.setBounds(0, 0, 800, 600);
-			FlxG.worldBounds = new FlxRect(0, 0, 800, 600);
+			FlxG.camera.setBounds(0, 0, 800, 1000);
+			FlxG.worldBounds = new FlxRect(0, 0, 800, 1000);
 			if (FlxG.getPlugin(FlxControl) == null)
 			{
 				FlxG.addPlugin(new FlxControl);
@@ -32,15 +32,15 @@ package
 			
 			sky = new FlxSprite(0, 0, skyPNG);
 			sky.width = 800;
-			sky.height = 208;
-			sky.scrollFactor.x = sky.scrollFactor.y = 0;
+			sky.height = 500;
+			//sky.scrollFactor.x = sky.scrollFactor.y = 0;
 			
-			sea = new FlxSprite(0, 208, seaPNG);
+			sea = new FlxSprite(0, 500, seaPNG);
 			sea.width = 800;
-			sea.height = 392;
-			sea.scrollFactor.x = sea.scrollFactor.y = 0;
+			sea.height = 500;
+			//sea.scrollFactor.x = sea.scrollFactor.y = 0;
 			
-			bird = new Bird(this, 120, 120);
+			bird = new Bird(this, 20, 480);
 			bird.play("stop");
 			
 			//FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
@@ -71,6 +71,7 @@ package
 			add(bird);
 			add(GUI);
 			
+			FlxG.camera.follow(bird);
 		}
 		
 		override public function update():void
@@ -101,7 +102,7 @@ package
 		}
 		
 		private function addFish():void {
-			var newFish:Fish = new Fish(this, FlxMath.rand(0, 800), FlxMath.rand(240, 600), "bluefish");
+			var newFish:Fish = new Fish(this, FlxMath.rand(0, 800), FlxMath.rand(500, 1000), "bluefish");
 			
 			//newFish.play("appear");
 			fishGroup.add(newFish);

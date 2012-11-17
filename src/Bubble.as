@@ -39,7 +39,7 @@ package
 		
 		
 		private function checkBounds():void {
-			if (y < 208) {
+			if (y < 500) {
 				this.kill();
 			}
 				

@@ -33,11 +33,7 @@ package
 				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
 			}
 			
-			//width = 32;
-			//height = 32;
 			elasticity = 0.6;
-			//maxVelocity.y = 400;
-			//maxVelocity.x = 200;
 			
 			if (FlxMath.rand(1, 3) == 1)
 				facing = LEFT;
@@ -101,18 +97,18 @@ package
 		}
 		
 		private function checkBounds():void {
-			if (y < 208) {
-				y = 208;
-			} else if (y > FlxG.height - this.height) {
-				y = FlxG.height - this.height;
+			if (y < 500) {
+				y = 500;
+			} else if (y > FlxG.worldBounds.height - this.height) {
+				y = FlxG.worldBounds.height - this.height;
 			}
 				
 			if (x < 0) {
 				x = 0;
 				velocity.x = -velocity.x * elasticity;
 				facing = RIGHT;
-			} else if (x > FlxG.width - this.width) {
-				x = FlxG.width - this.width;
+			} else if (x > FlxG.worldBounds.width - this.width) {
+				x = FlxG.worldBounds.width - this.width;
 				velocity.x = -velocity.x * elasticity;
 				facing = LEFT;
 			}

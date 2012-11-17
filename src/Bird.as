@@ -69,7 +69,7 @@ package
 		}
 		
 		private function checkDepth():void {
-			var depth:Number = 0.2 + (this.y - 208) / 300;
+			var depth:Number = 0.2 + (this.y - 500) / 300;
 			if (velocity.y > 0) {
 				this.acceleration.y = depth * WATER_BUOYANCY;
 			} else {
@@ -138,16 +138,16 @@ package
 		private function checkBounds():void {
 			if (y < 0) {
 				y = 0;
-			} else if (y > FlxG.height - this.height) {
-				y = FlxG.height - this.height;
+			} else if (y > FlxG.worldBounds.height - this.height) {
+				y = FlxG.worldBounds.height - this.height;
 			}
 				
 			if (x < 0) {
 				x = 0;
 				velocity.x = -velocity.x * ELASTICITY;
 				facing = RIGHT;
-			} else if (x > FlxG.width - this.width) {
-				x = FlxG.width - this.width;
+			} else if (x > FlxG.worldBounds.width - this.width) {
+				x = FlxG.worldBounds.width - this.width;
 				velocity.x = -velocity.x * ELASTICITY;
 				facing = LEFT;
 			}
