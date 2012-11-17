@@ -74,6 +74,10 @@ package
 			add(GUI);
 			
 			FlxG.camera.follow(bird);
+			
+			for (var i:int = 0; i < 10; i++) {
+				addFish();
+			}
 		}
 		
 		override public function update():void
@@ -104,9 +108,13 @@ package
 		}
 		
 		private function addFish():void {
-			var newFish:Fish = new Fish(this, FlxMath.rand(0, 800), FlxMath.rand(500, 1000), "bluefish");
 			
-			//newFish.play("appear");
+			var thisType:String = "bluefish";
+			if (Math.floor(Math.random()*10) >= 9) {
+				thisType = "yellowfish";
+			}
+				
+			var newFish:Fish = new Fish(this, FlxMath.rand(0, 800), FlxMath.rand(500, 1000), thisType);
 			fishGroup.add(newFish);
 			
 			//addBubble(newFish.x, newFish.y);

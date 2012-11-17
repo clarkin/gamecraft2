@@ -6,6 +6,7 @@ package
 	public class Fish extends FlxSprite
 	{
 		[Embed(source = "../assets/bluefish_31x31.png")] private var bluefishPNG:Class;
+		[Embed(source = "../assets/yellowfish_39x39.png")] private var yellowfishPNG:Class;
 		
 		public static const FLAP_X:Number = 80;
 		public static const FLAP_Y:Number = 40;
@@ -25,15 +26,23 @@ package
 			
 			switch (type) {
 				case "bluefish":
-				//width = 31;
-				//height = 31;
 				loadGraphic(bluefishPNG, true, true, 31, 31);
-				addAnimation("stop", [0], 0, true);
+				addAnimation("stop", [0]);
 				addAnimation("appear", [4, 5, 6, 7], 20, false);
+				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
+				break;
+				
+				case "yellowfish":
+				loadGraphic(yellowfishPNG, true, true, 39, 39);
+				addAnimation("stop", [0]);
+				addAnimation("appear", [4, 5, 0], 20, false);
 				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
 			}
 			
 			elasticity = 0.6;
+			
+			var randnum:int = Math.floor(Math.random() * 4) - 4;
+			moveTimer = blinkTimer = randnum;
 			
 			if (FlxMath.rand(1, 3) == 1)
 				facing = LEFT;
