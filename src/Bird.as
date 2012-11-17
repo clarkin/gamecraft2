@@ -11,7 +11,7 @@ package
 		public static const FLAP_Y:Number = 100;
 		public static const ELASTICITY:Number = 0.2;
 		public static const AIR_GRAVITY:Number = 200;
-		public static const WATER_BUOYANCY:Number = -400;
+		public static const WATER_BUOYANCY:Number = -1000;
 		
 		public var in_sky:Boolean = false;
 		public var in_sea:Boolean = false;
@@ -30,13 +30,14 @@ package
 			width = 32;
 			height = 32;
 			elasticity = 0.2;
-			maxVelocity.y = 400;
+			maxVelocity.y = 800;
 			maxVelocity.x = 200;
 			loadGraphic(birdPNG, true, true, 32, 32);
 			addAnimation("stop", [5]);
 			addAnimation("flap", [5, 4, 1], 20, false);
 			addAnimation("diving", [6]);
 			antialiasing = true;
+			this.acceleration.y = AIR_GRAVITY;
 			
 			in_sky = true;
 		}
@@ -44,7 +45,9 @@ package
 		
 		override public function update():void
 		{
-			
+			if (in_sea) {
+				checkDepth();
+			}
 			checkFlap();
 			checkBounds();
 			
@@ -54,16 +57,35 @@ package
 		public function nowInSky():void {
 			in_sky = true;
 			in_sea = false;
-			FlxControl.player1.setGravity(0, AIR_GRAVITY);
-			velocity.y *= (ELASTICITY * 2);
+			//FlxControl.player1.setGravity(0, AIR_GRAVITY);
+			this.acceleration.y = AIR_GRAVITY;
+			maxVelocity.y = 800;
 		}
 		public function nowInSea():void {
 			in_sky = false;
 			in_sea = true;
-			FlxControl.player1.setGravity(0, WATER_BUOYANCY);
+			this.acceleration.y = WATER_BUOYANCY;
+			//FlxControl.player1.setGravity(0, WATER_BUOYANCY);
+		}
+		
+		private function checkDepth():void {
+			var depth:Number = 0.2 + (this.y - 208) / 300;
+			if (velocity.y > 0) {
+				this.acceleration.y = depth * WATER_BUOYANCY;
+			} else {
+				maxVelocity.y = 150 * depth;
+			}
 		}
 		
 		private function checkFlap():void {
+			
+			if (FlxG.keys.LEFT) {
+				facing = LEFT;
+			} else if (FlxG.keys.RIGHT) {
+				facing = RIGHT;
+			}
+			
+			
 			if (FlxG.keys.SPACE) {
 				diveTimer += FlxG.elapsed;
 				if (!is_diving && in_sky && diveTimer > 0.5 && velocity.y > -10) {
@@ -80,7 +102,7 @@ package
 				{
 					is_diving = false;
 					play("stop");
-				} else {
+				} else if (in_sky) {
 					play("flap", true);
 					velocity.y -= FLAP_Y;
 					if (facing == LEFT)
@@ -92,10 +114,11 @@ package
 			
 			if (is_diving) {
 				if (in_sky) {
-					velocity.y += 100;
+					velocity.y += 10;
 				} else {
 					//velocity.y += 10;
 					//drag.y -= 10;
+					velocity.y += 2;
 					
 					if (Math.floor(Math.random() * 10) > 4)
 						_playstate.addBubble(x, y);

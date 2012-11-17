@@ -43,12 +43,14 @@ package
 			bird = new Bird(this, 120, 120);
 			bird.play("stop");
 			
-			FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
+			//FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
 			//FlxControl.player1.setStandardSpeed(300, true);
-			FlxControl.player1.setGravity(0, Bird.AIR_GRAVITY);
-			FlxControl.player1.setCursorControl(false, false, true, true);
+			//FlxControl.player1.setGravity(0, Bird.AIR_GRAVITY);
+			//FlxControl.player1.setCursorControl(false, false, true, true);
 			
 			FlxG.watch(bird, "y", "bird.y");
+			FlxG.watch(bird.acceleration, "y", "bird.acceleration.y");
+			FlxG.watch(bird.velocity, "y", "bird.velocity.y");
 			FlxG.watch(bird, "is_diving", "bird.is_diving");
 			FlxG.watch(bird, "in_sky", "bird.in_sky");
 			FlxG.watch(bird, "in_sea", "bird.in_sea");
@@ -76,6 +78,7 @@ package
 			
 			generateFish();
 			checkSkySea();
+			checkControls();
 			FlxG.collide(fishGroup);
 			FlxG.overlap(fishGroup, bird, birdEatsFish);
 			
@@ -107,29 +110,33 @@ package
 		}
 		
 		private function birdEatsFish(fish:Fish, bird:Bird):void {
-			addBubble(fish.x, fish.y);
-			addBubble(fish.x, fish.y);
-			addBubble(fish.x, fish.y);
-			addBubble(fish.x, fish.y);
-			addBubble(fish.x, fish.y);
+			var randbubbles:int = FlxMath.rand(0, 6);
+			for (var i:int = 0; i <= randbubbles; i++) {
+				addBubble(fish.x, fish.y);
+			}
 			fish.kill();
 			score++;
 			textScore.text = "Score: " + score;
 		}
 		
 		private function checkSkySea():void {
-			if (bird.y >= (sky.height + bird.height / 2) ) {
+			if (bird.y >= (sky.height - bird.height*0.75) && bird.velocity.y > 0 ) {
 				
 				if (bird.in_sky) {
 					bird.nowInSea();
 				}
 			}
-			else if (bird.y <= (sky.height - bird.height / 2) ) {
+			else if (bird.y <= (sky.height - bird.height*0.75) && bird.velocity.y <= 0 ) {
 				
 				if (bird.in_sea) {
 					bird.nowInSky();
 				}
 			}
+			
+		}
+		
+		private function checkControls():void {
+			
 			
 			if (FlxG.keys.justReleased("ESCAPE"))
 			{
