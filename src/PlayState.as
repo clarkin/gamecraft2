@@ -9,7 +9,7 @@ package
 		[Embed(source = "../assets/sea.png")] private var seaPNG:Class;
 		
 		
-		private var bird:FlxSprite;
+		private var bird:Bird;
 		private var sky:FlxSprite;
 		private var sea:FlxSprite;
 		
@@ -38,11 +38,12 @@ package
 			
 			FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
 			//FlxControl.player1.setStandardSpeed(300, true);
-			FlxControl.player1.setGravity(0, 100);
-			//FlxControl.player1.setCursorControl(true, false, false, false);
+			FlxControl.player1.setGravity(0, Bird.AIR_GRAVITY);
+			FlxControl.player1.setCursorControl(false, false, true, true);
 			
-			FlxG.watch(bird.velocity, "x", "vx");
-			FlxG.watch(bird.velocity, "y", "vy");
+			FlxG.watch(bird, "y", "bird.y");
+			FlxG.watch(bird, "in_sky", "bird.in_sky");
+			FlxG.watch(bird, "in_sea", "bird.in_sea");
 			
 			add(sky);
 			add(sea);
@@ -51,20 +52,12 @@ package
 		
 		override public function update():void
 		{
-			
-			
-			if (FlxG.keys.justReleased("SPACE"))
-			{
-				var flap_y:int = 100;
-				var flap_x:int = 30;
-				
-				bird.play("flap");
-				bird.velocity.y -= flap_y;
-				if (bird.facing == FlxObject.LEFT)
-					bird.velocity.x -= flap_x;
-				else
-					bird.velocity.x += flap_x;
-			}
+			//FlxG.overlap(sky, bird, birdInSky);
+			//FlxG.overlap(sea, bird, birdInSea);
+			if (bird.y >= (sky.height + bird.height / 2) && bird.in_sky)
+				bird.nowInSea();
+			else if (bird.y <= (sky.height - bird.height / 2) && bird.in_sea)
+				bird.nowInSky();
 			
 			if (FlxG.keys.justReleased("ESCAPE"))
 			{
@@ -72,6 +65,16 @@ package
 			}
 			
 			super.update();
+		}
+		
+		public function birdInSky(sky:FlxSprite, bird:Bird):void {
+			if (bird.in_sea)
+				bird.nowInSky();
+		}
+		
+		public function birdInSea(sea:FlxSprite, bird:Bird):void {
+			if (bird.in_sky)
+				bird.nowInSea();
 		}
 	}
 }
