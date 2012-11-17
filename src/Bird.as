@@ -16,6 +16,7 @@ package
 		public var in_sky:Boolean = false;
 		public var in_sea:Boolean = false;
 		public var is_diving:Boolean = false;
+		public var stopped:Boolean = true;
 		
 		private var diveTimer:Number = 0;
 		public var depthModifier:Number = 1;
@@ -31,8 +32,8 @@ package
 			width = 32;
 			height = 32;
 			elasticity = 0.2;
-			maxVelocity.y = 800;
-			maxVelocity.x = 200;
+			maxVelocity.y = 0;
+			maxVelocity.x = 0;
 			loadGraphic(birdPNG, true, true, 32, 32);
 			addAnimation("stop", [5]);
 			addAnimation("flap", [5, 4, 1], 20, false);
@@ -100,8 +101,14 @@ package
 				}
 			}
 			
-			if (FlxG.keys.justReleased("SPACE"))
+			if (FlxG.keys.justPressed("SPACE"))
 			{	
+				if (stopped) {
+					stopped = false;
+					maxVelocity.y = 800;
+					maxVelocity.x = 200;
+				}
+				
 				diveTimer = 0;
 				if (is_diving)
 				{

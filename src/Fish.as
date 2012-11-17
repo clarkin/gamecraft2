@@ -15,6 +15,7 @@ package
 		private var appearing:Boolean = true;
 		private var moveTimer:Number = 0;
 		private var blinkTimer:Number = 0;
+		public var value:int = 1;
 		
 		private var _playstate:PlayState;
 		
@@ -37,6 +38,7 @@ package
 				addAnimation("stop", [0]);
 				addAnimation("appear", [4, 5, 0], 20, false);
 				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
+				value = 10;
 			}
 			
 			elasticity = 0.6;

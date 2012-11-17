@@ -40,7 +40,7 @@ package
 			sea.height = 500;
 			//sea.scrollFactor.x = sea.scrollFactor.y = 0;
 			
-			bird = new Bird(this, 20, 420);
+			bird = new Bird(this, 20, 480);
 			bird.play("stop");
 			
 			//FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
@@ -62,7 +62,7 @@ package
 			
 			GUI = new FlxGroup();
 			textScore = new FlxText(600, 0, 200, "Score: 0", false);
-			textScore.setFormat("Venue", 24, 0xFFCCCCFF, "left", 0xFF666666);
+			textScore.setFormat(null, 24, 0xFFCCCCFF, "left", 0xFF000000);
 			textScore.scrollFactor.x = textScore.scrollFactor.y = 0;
 			GUI.add(textScore);
 			
@@ -110,7 +110,7 @@ package
 		private function addFish():void {
 			
 			var thisType:String = "bluefish";
-			if (Math.floor(Math.random()*10) >= 9) {
+			if (Math.floor(Math.random()*10) >= 8) {
 				thisType = "yellowfish";
 			}
 				
@@ -125,8 +125,8 @@ package
 			for (var i:int = 0; i <= randbubbles; i++) {
 				addBubble(fish.x, fish.y);
 			}
+			score += fish.value;
 			fish.kill();
-			score++;
 			textScore.text = "Score: " + score;
 		}
 		
