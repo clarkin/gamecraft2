@@ -13,7 +13,7 @@ package
 
 		override public function create():void
 		{
-			FlxG.mouse.show();
+			FlxG.mouse.hide();
 			
 			var title:FlxText = new FlxText(0, 100, 800, "Seabird Plunge", true);
 			title.setFormat("Venue", 100, 0xFF3333CC, "center");

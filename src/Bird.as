@@ -8,7 +8,7 @@ package
 		[Embed(source = "../assets/birds32x32_flipped.png")] private var birdPNG:Class;
 		
 		public static const FLAP_X:Number = 50;
-		public static const FLAP_Y:Number = 200;
+		public static const FLAP_Y:Number = 150;
 		public static const ELASTICITY:Number = 0.2;
 		public static const AIR_GRAVITY:Number = 300;
 		public static const WATER_BUOYANCY:Number = -1400;
@@ -73,10 +73,10 @@ package
 				if (velocity.y > 0) {
 					this.acceleration.y = depthModifier * WATER_BUOYANCY;
 				} else {
-					maxVelocity.y = 200 * depthModifier;
+					maxVelocity.y = 200; // 400 * depthModifier;
 				}
 			} else {
-				depthModifier = 0.3 + (this.y) * (this.y) / 250000;
+				depthModifier = 0.05 + (this.y) * (this.y) / 250000;
 			}
 			
 			
@@ -107,13 +107,18 @@ package
 				{
 					is_diving = false;
 					play("stop");
-				} else if (in_sky) {
+				} else {
 					play("flap", true);
-					velocity.y -= FLAP_Y * depthModifier;
-					if (facing == LEFT)
-						velocity.x -= FLAP_X * depthModifier;
-					else
-						velocity.x += FLAP_X * depthModifier;
+					if (in_sky) {
+						velocity.y -= FLAP_Y * depthModifier;
+						if (facing == LEFT)
+							velocity.x -= FLAP_X * depthModifier;
+						else
+							velocity.x += FLAP_X * depthModifier;
+					} else {
+						velocity.y -= FLAP_Y / 2;
+						_playstate.addBubble(x, y);
+					}
 				}
 			}
 			
