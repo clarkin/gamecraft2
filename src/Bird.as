@@ -15,10 +15,17 @@ package
 		
 		public var in_sky:Boolean = false;
 		public var in_sea:Boolean = false;
+		public var is_diving:Boolean = false;
 		
-		public function Bird(X:Number = 0, Y:Number = 0) 
+		private var diveTimer:Number = 0;
+		
+		private var _playstate:PlayState;
+		
+		public function Bird(playstate:PlayState, X:Number = 0, Y:Number = 0) 
 		{
 			super(X, Y);
+			
+			_playstate = playstate;
 			
 			width = 32;
 			height = 32;
@@ -26,8 +33,10 @@ package
 			maxVelocity.y = 400;
 			maxVelocity.x = 200;
 			loadGraphic(birdPNG, true, true, 32, 32);
-			addAnimation("stop", [5], 10, true);
+			addAnimation("stop", [5]);
 			addAnimation("flap", [5, 4, 1], 20, false);
+			addAnimation("diving", [6]);
+			antialiasing = true;
 			
 			in_sky = true;
 		}
@@ -55,15 +64,52 @@ package
 		}
 		
 		private function checkFlap():void {
-			if (FlxG.keys.justReleased("SPACE"))
-			{				
-				play("flap", true);
-				velocity.y -= FLAP_Y;
-				if (facing == LEFT)
-					velocity.x -= FLAP_X;
-				else
-					velocity.x += FLAP_X;
+			if (FlxG.keys.SPACE) {
+				diveTimer += FlxG.elapsed;
+				if (!is_diving && in_sky && diveTimer > 0.5 && velocity.y > -10) {
+					is_diving = true;
+					diveTimer = 0;
+					play("diving");
+				}
 			}
+			
+			if (FlxG.keys.justReleased("SPACE"))
+			{	
+				diveTimer = 0;
+				if (is_diving)
+				{
+					is_diving = false;
+					play("stop");
+				} else {
+					play("flap", true);
+					velocity.y -= FLAP_Y;
+					if (facing == LEFT)
+						velocity.x -= FLAP_X;
+					else
+						velocity.x += FLAP_X;
+				}
+			}
+			
+			if (is_diving) {
+				if (in_sky) {
+					velocity.y += 100;
+				} else {
+					//velocity.y += 10;
+					//drag.y -= 10;
+					
+					if (Math.floor(Math.random() * 10) > 4)
+						_playstate.addBubble(x, y);
+						
+					diveTimer += FlxG.elapsed;
+					if (diveTimer > 3) {
+						is_diving = false;
+						play("stop");
+					}
+				}
+			} else {
+				
+			}
+			
 		}
 		
 		private function checkBounds():void {

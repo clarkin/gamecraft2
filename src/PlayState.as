@@ -40,7 +40,7 @@ package
 			sea.height = 392;
 			sea.scrollFactor.x = sea.scrollFactor.y = 0;
 			
-			bird = new Bird(120, 120);
+			bird = new Bird(this, 120, 120);
 			bird.play("stop");
 			
 			FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
@@ -49,6 +49,7 @@ package
 			FlxControl.player1.setCursorControl(false, false, true, true);
 			
 			FlxG.watch(bird, "y", "bird.y");
+			FlxG.watch(bird, "is_diving", "bird.is_diving");
 			FlxG.watch(bird, "in_sky", "bird.in_sky");
 			FlxG.watch(bird, "in_sea", "bird.in_sea");
 			
@@ -106,16 +107,29 @@ package
 		}
 		
 		private function birdEatsFish(fish:Fish, bird:Bird):void {
+			addBubble(fish.x, fish.y);
+			addBubble(fish.x, fish.y);
+			addBubble(fish.x, fish.y);
+			addBubble(fish.x, fish.y);
+			addBubble(fish.x, fish.y);
 			fish.kill();
 			score++;
 			textScore.text = "Score: " + score;
 		}
 		
 		private function checkSkySea():void {
-			if (bird.y >= (sky.height + bird.height / 2) && bird.in_sky)
-				bird.nowInSea();
-			else if (bird.y <= (sky.height - bird.height / 2) && bird.in_sea)
-				bird.nowInSky();
+			if (bird.y >= (sky.height + bird.height / 2) ) {
+				
+				if (bird.in_sky) {
+					bird.nowInSea();
+				}
+			}
+			else if (bird.y <= (sky.height - bird.height / 2) ) {
+				
+				if (bird.in_sea) {
+					bird.nowInSky();
+				}
+			}
 			
 			if (FlxG.keys.justReleased("ESCAPE"))
 			{
