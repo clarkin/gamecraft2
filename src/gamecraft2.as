@@ -1,7 +1,7 @@
 package
 {
 	import org.flixel.*; 
-	[SWF(width = "640", height = "480", backgroundColor = "#000000")] 
+	[SWF(width = "800", height = "600", backgroundColor = "#000000")] 
 	[Frame(factoryClass="Preloader")]
  
 	public class gamecraft2 extends FlxGame
@@ -9,7 +9,7 @@ package
 		public function gamecraft2()
 		{
 			
-			super(640, 480, MenuState, 1); 
+			super(800, 600, MenuState, 1); 
 		}
 	}
 }

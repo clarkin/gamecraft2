@@ -1,6 +1,7 @@
 package
 {
 	import org.flixel.*;
+	import org.flixel.plugin.photonstorm.*;
 
 	public class MenuState extends FlxState
 	{
@@ -13,8 +14,9 @@ package
 		override public function create():void
 		{
 			FlxG.mouse.show();
-			startButton = new FlxButton(120, 90, "Start Game", startGame);
-			add(startButton);
+			var playback:FlxButtonPlus = new FlxButtonPlus(32, 32, startGame, null, "Start Game");
+			add(playback);
+			startGame();
 		}
 
 		private function startGame():void
