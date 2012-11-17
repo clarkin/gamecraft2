@@ -5,6 +5,7 @@ package
  
 	public class PlayState extends FlxState
 	{
+		[Embed(source = "../assets/Venue_on_the_Beach.ttf", fontFamily = "Venue", embedAsCFF = "false")] public	var	FontVenue:String;
 		[Embed(source = "../assets/sky.png")] private var skyPNG:Class;
 		[Embed(source = "../assets/sea.png")] private var seaPNG:Class;
 		
@@ -14,6 +15,8 @@ package
 		private var sea:FlxSprite;
 		private var fishGroup:FlxGroup;
 		private var fishTimer:Number = 0;
+		private var GUI:FlxGroup;
+		private var textScore:FlxText;
 		
 		override public function create():void
 		{
@@ -49,10 +52,17 @@ package
 			
 			fishGroup = new FlxGroup(100);
 			
+			GUI = new FlxGroup();
+			textScore = new FlxText(600, 0, 200, "Score: 0", false);
+			textScore.setFormat("Venue", 24, 0xFFCCCCFF, "left", 0x33666666);
+			textScore.scrollFactor.x = textScore.scrollFactor.y = 0;
+			GUI.add(textScore);
+			
 			add(sky);
 			add(sea);
 			add(bird);
 			add(fishGroup);
+			add(GUI);
 		}
 		
 		override public function update():void
@@ -60,6 +70,8 @@ package
 			
 			generateFish();
 			checkSkySea();
+			FlxG.collide(fishGroup);
+			FlxG.overlap(fishGroup, bird, birdEatsFish);
 			
 			super.update();
 		}
@@ -79,6 +91,10 @@ package
 			
 			//newFish.play("appear");
 			fishGroup.add(newFish);
+		}
+		
+		private function birdEatsFish(fish:Fish, bird:Bird):void {
+			fish.kill();
 		}
 		
 		private function checkSkySea():void {

@@ -7,12 +7,13 @@ package
 	{
 		[Embed(source = "../assets/bluefish_31x31.png")] private var bluefishPNG:Class;
 		
-		public static const FLAP_X:Number = 100;
-		public static const FLAP_Y:Number = 20;
-		public static const DRAG:Number = 30;
+		public static const FLAP_X:Number = 80;
+		public static const FLAP_Y:Number = 40;
+		public static const DRAG:Number = 200;
 		
 		private var appearing:Boolean = true;
 		private var moveTimer:Number = 0;
+		private var blinkTimer:Number = 0;
 		
 		public function Fish(X:Number = 0, Y:Number = 0, type:String = "bluefish") 
 		{
@@ -25,12 +26,12 @@ package
 				loadGraphic(bluefishPNG, true, true, 31, 31);
 				addAnimation("stop", [0], 0, true);
 				addAnimation("appear", [4, 5, 6, 7], 20, false);
-				addAnimation("blink", [0, 1, 2, 3], 20, false);
+				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
 			}
 			
 			//width = 32;
 			//height = 32;
-			elasticity = 0.2;
+			elasticity = 0.6;
 			//maxVelocity.y = 400;
 			//maxVelocity.x = 200;
 			
@@ -38,18 +39,20 @@ package
 				facing = LEFT;
 			else 
 				facing = RIGHT;
+			
+			play("appear");
 		}
 		
 		
 		override public function update():void
 		{
-			if (this.finished) {
+			if (this.finished && appearing) {
 				play("stop");
 				appearing = false;
 			}
 			
 			if (appearing) {
-				play("appear"); 
+				//play("appear"); 
 			} else {
 				checkMove();
 			}
@@ -63,8 +66,10 @@ package
 		
 		private function checkMove():void {
 			moveTimer += FlxG.elapsed;
+			blinkTimer += FlxG.elapsed;
+			
 			if (moveTimer > 5) {
-				moveTimer = FlxMath.randFloat( -5, 4);
+				moveTimer = FlxMath.randFloat(-5, 4);
 				
 				var down:int = 1;
 				if (Math.floor(Math.random() * 2) == 1)
@@ -80,7 +85,11 @@ package
 				this.velocity.y += down * (Math.floor(Math.random() * FLAP_Y) + DRAG);
 				this.drag.x = DRAG;
 				this.drag.y = DRAG;
+			} else if (blinkTimer > 10) {
+				blinkTimer = FlxMath.randFloat( -10, 8);
+				play("blink");
 			}
+			
 		}
 		
 		private function checkBounds():void {
