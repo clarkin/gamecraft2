@@ -29,7 +29,7 @@ package
 			add(playback);
 			
 			
-			/startGame();
+			startGame();
 		}
 
 		private function startGame():void

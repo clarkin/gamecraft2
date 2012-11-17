@@ -8,15 +8,17 @@ package
 		[Embed(source = "../assets/Venue_on_the_Beach.ttf", fontFamily = "Venue", embedAsCFF = "false")] public	var	FontVenue:String;
 		[Embed(source = "../assets/sky.png")] private var skyPNG:Class;
 		[Embed(source = "../assets/sea.png")] private var seaPNG:Class;
-		
-		
+				
 		private var bird:Bird;
 		private var sky:FlxSprite;
 		private var sea:FlxSprite;
 		private var fishGroup:FlxGroup;
+		private var bubbleGroup:FlxGroup;
+		
 		private var fishTimer:Number = 0;
 		private var GUI:FlxGroup;
 		private var textScore:FlxText;
+		private var score:Number = 0;
 		
 		override public function create():void
 		{
@@ -51,6 +53,7 @@ package
 			FlxG.watch(bird, "in_sea", "bird.in_sea");
 			
 			fishGroup = new FlxGroup(100);
+			bubbleGroup = new FlxGroup(500);
 			
 			GUI = new FlxGroup();
 			textScore = new FlxText(600, 0, 200, "Score: 0", false);
@@ -60,9 +63,11 @@ package
 			
 			add(sky);
 			add(sea);
-			add(bird);
 			add(fishGroup);
+			add(bubbleGroup);
+			add(bird);
 			add(GUI);
+			
 		}
 		
 		override public function update():void
@@ -76,6 +81,11 @@ package
 			super.update();
 		}
 		
+		public function addBubble(X:Number = 0, Y:Number = 0):void {
+			
+			bubbleGroup.add(new Bubble(X, Y));
+		}
+		
 		private function generateFish():void {
 				fishTimer += FlxG.elapsed;
 				if (fishTimer > 5) {
@@ -87,14 +97,18 @@ package
 		}
 		
 		private function addFish():void {
-			var newFish:Fish = new Fish(FlxMath.rand(0, 800), FlxMath.rand(240, 600), "bluefish");
+			var newFish:Fish = new Fish(this, FlxMath.rand(0, 800), FlxMath.rand(240, 600), "bluefish");
 			
 			//newFish.play("appear");
 			fishGroup.add(newFish);
+			
+			//addBubble(newFish.x, newFish.y);
 		}
 		
 		private function birdEatsFish(fish:Fish, bird:Bird):void {
 			fish.kill();
+			score++;
+			textScore.text = "Score: " + score;
 		}
 		
 		private function checkSkySea():void {

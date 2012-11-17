@@ -15,9 +15,13 @@ package
 		private var moveTimer:Number = 0;
 		private var blinkTimer:Number = 0;
 		
-		public function Fish(X:Number = 0, Y:Number = 0, type:String = "bluefish") 
+		private var _playstate:PlayState;
+		
+		public function Fish(playstate:PlayState, X:Number = 0, Y:Number = 0, type:String = "bluefish") 
 		{
 			super(X, Y);
+			
+			_playstate = playstate;
 			
 			switch (type) {
 				case "bluefish":
@@ -87,7 +91,11 @@ package
 				this.drag.y = DRAG;
 			} else if (blinkTimer > 10) {
 				blinkTimer = FlxMath.randFloat( -10, 8);
-				play("blink");
+				if (Math.floor(Math.random()*2) == 1) {
+					play("blink");
+				} else {
+					_playstate.addBubble(x, y);
+				}
 			}
 			
 		}
