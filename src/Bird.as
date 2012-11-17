@@ -7,17 +7,18 @@ package
 	{
 		[Embed(source = "../assets/birds32x32_flipped.png")] private var birdPNG:Class;
 		
-		public static const FLAP_X:Number = 30;
-		public static const FLAP_Y:Number = 100;
+		public static const FLAP_X:Number = 50;
+		public static const FLAP_Y:Number = 200;
 		public static const ELASTICITY:Number = 0.2;
-		public static const AIR_GRAVITY:Number = 200;
-		public static const WATER_BUOYANCY:Number = -1000;
+		public static const AIR_GRAVITY:Number = 300;
+		public static const WATER_BUOYANCY:Number = -1400;
 		
 		public var in_sky:Boolean = false;
 		public var in_sea:Boolean = false;
 		public var is_diving:Boolean = false;
 		
 		private var diveTimer:Number = 0;
+		public var depthModifier:Number = 1;
 		
 		private var _playstate:PlayState;
 		
@@ -45,9 +46,9 @@ package
 		
 		override public function update():void
 		{
-			if (in_sea) {
-				checkDepth();
-			}
+			
+			checkDepth();
+			
 			checkFlap();
 			checkBounds();
 			
@@ -57,24 +58,28 @@ package
 		public function nowInSky():void {
 			in_sky = true;
 			in_sea = false;
-			//FlxControl.player1.setGravity(0, AIR_GRAVITY);
 			this.acceleration.y = AIR_GRAVITY;
 			maxVelocity.y = 800;
 		}
 		public function nowInSea():void {
 			in_sky = false;
 			in_sea = true;
-			this.acceleration.y = WATER_BUOYANCY;
-			//FlxControl.player1.setGravity(0, WATER_BUOYANCY);
+			this.acceleration.y = WATER_BUOYANCY;// * depthModifier;
 		}
 		
 		private function checkDepth():void {
-			var depth:Number = 0.2 + (this.y - 500) / 300;
-			if (velocity.y > 0) {
-				this.acceleration.y = depth * WATER_BUOYANCY;
+			if (in_sea) {
+				depthModifier = 0.3 + (this.y - 500) * (this.y - 500) / 250000;
+				if (velocity.y > 0) {
+					this.acceleration.y = depthModifier * WATER_BUOYANCY;
+				} else {
+					maxVelocity.y = 200 * depthModifier;
+				}
 			} else {
-				maxVelocity.y = 150 * depth;
+				depthModifier = 0.3 + (this.y) * (this.y) / 250000;
 			}
+			
+			
 		}
 		
 		private function checkFlap():void {
@@ -104,11 +109,11 @@ package
 					play("stop");
 				} else if (in_sky) {
 					play("flap", true);
-					velocity.y -= FLAP_Y;
+					velocity.y -= FLAP_Y * depthModifier;
 					if (facing == LEFT)
-						velocity.x -= FLAP_X;
+						velocity.x -= FLAP_X * depthModifier;
 					else
-						velocity.x += FLAP_X;
+						velocity.x += FLAP_X * depthModifier;
 				}
 			}
 			

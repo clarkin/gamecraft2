@@ -40,7 +40,7 @@ package
 			sea.height = 500;
 			//sea.scrollFactor.x = sea.scrollFactor.y = 0;
 			
-			bird = new Bird(this, 20, 480);
+			bird = new Bird(this, 20, 420);
 			bird.play("stop");
 			
 			//FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
@@ -51,6 +51,8 @@ package
 			FlxG.watch(bird, "y", "bird.y");
 			FlxG.watch(bird.acceleration, "y", "bird.acceleration.y");
 			FlxG.watch(bird.velocity, "y", "bird.velocity.y");
+			FlxG.watch(bird, "depthModifier", "bird.depthModifier");
+			FlxG.watch(bird.maxVelocity, "y", "bird.maxVelocity.y");
 			FlxG.watch(bird, "is_diving", "bird.is_diving");
 			FlxG.watch(bird, "in_sky", "bird.in_sky");
 			FlxG.watch(bird, "in_sea", "bird.in_sea");
@@ -60,7 +62,7 @@ package
 			
 			GUI = new FlxGroup();
 			textScore = new FlxText(600, 0, 200, "Score: 0", false);
-			textScore.setFormat("Venue", 24, 0xFFCCCCFF, "left", 0x33666666);
+			textScore.setFormat("Venue", 24, 0xFFCCCCFF, "left", 0xFF666666);
 			textScore.scrollFactor.x = textScore.scrollFactor.y = 0;
 			GUI.add(textScore);
 			
