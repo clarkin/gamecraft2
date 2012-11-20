@@ -2,12 +2,16 @@ package
 {
 	import org.flixel.*;
 	import org.flixel.plugin.photonstorm.*;
+	import org.as3wavsound.*;
+	import flash.utils.ByteArray;
  
 	public class PlayState extends FlxState
 	{
 		[Embed(source = "../assets/Venue_on_the_Beach.ttf", fontFamily = "Venue", embedAsCFF = "false")] public	var	FontVenue:String;
 		[Embed(source = "../assets/sky.png")] private var skyPNG:Class;
 		[Embed(source = "../assets/sea.png")] private var seaPNG:Class;
+		
+		[Embed(source = "../assets/splash.wav", mimeType = "application/octet-stream")] private const SplashWAV:Class;
 				
 		private var bird:Bird;
 		private var sky:FlxSprite;
@@ -19,6 +23,8 @@ package
 		private var GUI:FlxGroup;
 		private var textScore:FlxText;
 		private var score:Number = 0;
+		
+		private var splashSound:WavSound;
 		
 		override public function create():void
 		{
@@ -73,6 +79,8 @@ package
 			for (var i:int = 0; i < 10; i++) {
 				addFish();
 			}
+			
+			splashSound = new WavSound(new SplashWAV() as ByteArray);
 		}
 		
 		override public function update():void
@@ -124,6 +132,8 @@ package
 				score += fish.value;
 				fish.kill();
 				textScore.text = "Score: " + score;
+			} else {
+				fish.startMove(0.2);
 			}
 		}
 		
@@ -131,6 +141,8 @@ package
 			if (bird.y >= (sky.height - bird.height*0.75) && bird.velocity.y > 0 ) {
 				
 				if (bird.in_sky) {
+					
+					splashSound.play();
 					bird.nowInSea();
 				}
 			}

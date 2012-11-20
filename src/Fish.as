@@ -81,21 +81,7 @@ package
 			
 			if (moveTimer > 5) {
 				moveTimer = FlxMath.randFloat(-5, 4);
-				
-				var down:int = 1;
-				if (Math.floor(Math.random() * 2) == 1)
-					down = -1;
-				var right:int = 1;
-				facing = RIGHT;
-				if (Math.floor(Math.random() * 2) == 1) {
-					right = -1;
-					facing = LEFT;
-				}	
-				
-				this.velocity.x += right * (Math.floor(Math.random() * FLAP_X) + DRAG);
-				this.velocity.y += down * (Math.floor(Math.random() * FLAP_Y) + DRAG);
-				this.drag.x = DRAG;
-				this.drag.y = DRAG;
+				startMove();
 			} else if (blinkTimer > 10) {
 				blinkTimer = FlxMath.randFloat( -10, 8);
 				if (Math.floor(Math.random()*2) == 1) {
@@ -105,6 +91,23 @@ package
 				}
 			}
 			
+		}
+		
+		public function startMove(intensity:Number = 1.0):void {
+			var down:int = intensity;
+			if (Math.floor(Math.random() * 2) == 1)
+				down = -down;
+			var right:int = intensity;
+			facing = RIGHT;
+			if (Math.floor(Math.random() * 2) == 1) {
+				right = -right;
+				facing = LEFT;
+			}	
+			
+			this.velocity.x += right * (Math.floor(Math.random() * FLAP_X) + DRAG);
+			this.velocity.y += down * (Math.floor(Math.random() * FLAP_Y) + DRAG);
+			this.drag.x = DRAG;
+				this.drag.y = DRAG;
 		}
 		
 		private function checkBounds():void {
