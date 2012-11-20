@@ -43,11 +43,6 @@ package
 			bird = new Bird(this, 20, 480);
 			bird.play("stop");
 			
-			//FlxControl.create(bird, FlxControlHandler.MOVEMENT_ACCELERATES, FlxControlHandler.STOPPING_DECELERATES, 1, true, true);
-			//FlxControl.player1.setStandardSpeed(300, true);
-			//FlxControl.player1.setGravity(0, Bird.AIR_GRAVITY);
-			//FlxControl.player1.setCursorControl(false, false, true, true);
-			
 			FlxG.watch(bird, "y", "bird.y");
 			FlxG.watch(bird.acceleration, "y", "bird.acceleration.y");
 			FlxG.watch(bird.velocity, "y", "bird.velocity.y");
@@ -87,7 +82,7 @@ package
 			checkSkySea();
 			checkControls();
 			FlxG.collide(fishGroup);
-			FlxG.overlap(fishGroup, bird, birdEatsFish);
+			FlxG.collide(fishGroup, bird, birdEatsFish);
 			
 			super.update();
 		}
@@ -121,13 +116,15 @@ package
 		}
 		
 		private function birdEatsFish(fish:Fish, bird:Bird):void {
-			var randbubbles:int = FlxMath.rand(0, 6);
-			for (var i:int = 0; i <= randbubbles; i++) {
-				addBubble(fish.x, fish.y);
+			if (bird.is_diving) {
+				var randbubbles:int = FlxMath.rand(0, 6);
+				for (var i:int = 0; i <= randbubbles; i++) {
+					addBubble(fish.x, fish.y);
+				}
+				score += fish.value;
+				fish.kill();
+				textScore.text = "Score: " + score;
 			}
-			score += fish.value;
-			fish.kill();
-			textScore.text = "Score: " + score;
 		}
 		
 		private function checkSkySea():void {
