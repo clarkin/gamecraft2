@@ -98,6 +98,7 @@ package
 					is_diving = true;
 					diveTimer = 0;
 					play("diving");
+					_playstate.cawSound.play();
 				}
 			}
 			

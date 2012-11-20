@@ -12,6 +12,11 @@ package
 		[Embed(source = "../assets/sea.png")] private var seaPNG:Class;
 		
 		[Embed(source = "../assets/splash.wav", mimeType = "application/octet-stream")] private const SplashWAV:Class;
+		[Embed(source = "../assets/caw.wav", mimeType = "application/octet-stream")] private const CawWAV:Class;
+		[Embed(source = "../assets/chomp.wav", mimeType = "application/octet-stream")] private const ChompWAV:Class;
+		public var splashSound:WavSound;
+		public var cawSound:WavSound;
+		public var chompSound:WavSound;
 				
 		private var bird:Bird;
 		private var sky:FlxSprite;
@@ -24,7 +29,7 @@ package
 		private var textScore:FlxText;
 		private var score:Number = 0;
 		
-		private var splashSound:WavSound;
+		
 		
 		override public function create():void
 		{
@@ -81,6 +86,8 @@ package
 			}
 			
 			splashSound = new WavSound(new SplashWAV() as ByteArray);
+			cawSound = new WavSound(new CawWAV() as ByteArray);
+			chompSound = new WavSound(new ChompWAV() as ByteArray);
 		}
 		
 		override public function update():void
@@ -131,6 +138,7 @@ package
 				}
 				score += fish.value;
 				fish.kill();
+				chompSound.play();
 				textScore.text = "Score: " + score;
 			} else {
 				fish.startMove(0.2);
@@ -141,7 +149,6 @@ package
 			if (bird.y >= (sky.height - bird.height*0.75) && bird.velocity.y > 0 ) {
 				
 				if (bird.in_sky) {
-					
 					splashSound.play();
 					bird.nowInSea();
 				}
@@ -149,6 +156,7 @@ package
 			else if (bird.y <= (sky.height - bird.height*0.75) && bird.velocity.y <= 0 ) {
 				
 				if (bird.in_sea) {
+					splashSound.play();
 					bird.nowInSky();
 				}
 			}
