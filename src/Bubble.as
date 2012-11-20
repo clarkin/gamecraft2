@@ -11,8 +11,6 @@ package
 		
 		public function Bubble(X:Number = 0, Y:Number = 0)
 		{
-			X += FlxMath.rand( -10, 10);
-			Y += FlxMath.rand( -10, 10);
 			super(X,Y);
 			
 			loadGraphic(bubblesPNG, true, true, 15, 15);

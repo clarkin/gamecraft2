@@ -40,6 +40,7 @@ package
 				addAnimation("stop", [0]);
 				addAnimation("appear", [0], 20, false);
 				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
+				value = 2;
 				break;
 				
 				case "bluefish":
@@ -47,6 +48,7 @@ package
 				addAnimation("stop", [0]);
 				addAnimation("appear", [4, 5, 6, 7], 20, false);
 				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
+				value = 5;
 				break;
 				
 				case "yellowfish":

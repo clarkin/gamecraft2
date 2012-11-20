@@ -22,7 +22,9 @@ package
 		private var sky:FlxSprite;
 		private var sea:FlxSprite;
 		private var fishGroup:FlxGroup;
+		private var maxFish:int = 200;
 		private var bubbleGroup:FlxGroup;
+		private var maxBubbles:int = 1000;
 		
 		private var fishTimer:Number = 0;
 		private var GUI:FlxGroup;
@@ -63,8 +65,14 @@ package
 			FlxG.watch(bird, "in_sky", "bird.in_sky");
 			FlxG.watch(bird, "in_sea", "bird.in_sea");
 			
-			fishGroup = new FlxGroup(100);
-			bubbleGroup = new FlxGroup(500);
+			fishGroup = new FlxGroup(maxFish);
+			bubbleGroup = new FlxGroup(maxBubbles);
+			for (var i:int = 0; i < maxBubbles; i++)
+			{
+				var bubble:Bubble = new Bubble(0, 0);
+				bubble.kill();
+				bubbleGroup.add(bubble);
+			}
 			
 			GUI = new FlxGroup();
 			textScore = new FlxText(600, 0, 200, "Score: 0", false);
@@ -81,7 +89,7 @@ package
 			
 			FlxG.camera.follow(bird);
 			
-			for (var i:int = 0; i < 10; i++) {
+			for (i = 0; i < 30; i++) {
 				addFish();
 			}
 			
@@ -104,7 +112,11 @@ package
 		
 		public function addBubble(X:Number = 0, Y:Number = 0):void {
 			
-			bubbleGroup.add(new Bubble(X, Y));
+			//bubbleGroup.add(new Bubble(X, Y));
+			var newBubble:Bubble = bubbleGroup.recycle(Bubble) as Bubble;
+			X += FlxMath.rand( -10, 10);
+			Y += FlxMath.rand( -10, 10);
+			newBubble.reset(X, Y);
 		}
 		
 		private function generateFish():void {
@@ -130,8 +142,6 @@ package
 				
 			var newFish:Fish = new Fish(this, FlxMath.rand(0, 800), FlxMath.rand(500, 1000), thisType);
 			fishGroup.add(newFish);
-			
-			//addBubble(newFish.x, newFish.y);
 		}
 		
 		private function birdEatsFish(fish:Fish, bird:Bird):void {
