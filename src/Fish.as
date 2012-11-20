@@ -5,6 +5,8 @@ package
 	
 	public class Fish extends FlxSprite
 	{
+		[Embed(source = "../assets/redfish_15x15.png")] private var redfishPNG:Class;
+		[Embed(source = "../assets/greenfish_23x23.png")] private var greenfishPNG:Class;
 		[Embed(source = "../assets/bluefish_31x31.png")] private var bluefishPNG:Class;
 		[Embed(source = "../assets/yellowfish_39x39.png")] private var yellowfishPNG:Class;
 		
@@ -26,6 +28,20 @@ package
 			_playstate = playstate;
 			
 			switch (type) {
+				case "redfish":
+				loadGraphic(redfishPNG, true, true, 15, 15);
+				addAnimation("stop", [0]);
+				addAnimation("appear", [0], 20, false);
+				addAnimation("blink", [0], 20, false);
+				break;
+				
+				case "greenfish":
+				loadGraphic(greenfishPNG, true, true, 23, 23);
+				addAnimation("stop", [0]);
+				addAnimation("appear", [0], 20, false);
+				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
+				break;
+				
 				case "bluefish":
 				loadGraphic(bluefishPNG, true, true, 31, 31);
 				addAnimation("stop", [0]);
@@ -39,6 +55,7 @@ package
 				addAnimation("appear", [4, 5, 0], 20, false);
 				addAnimation("blink", [0, 1, 2, 3, 0], 20, false);
 				value = 10;
+				break;
 			}
 			
 			elasticity = 0.6;

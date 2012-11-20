@@ -118,10 +118,14 @@ package
 		}
 		
 		private function addFish():void {
-			
-			var thisType:String = "bluefish";
-			if (Math.floor(Math.random()*10) >= 8) {
+			var thisRand:int = Math.floor(Math.random() * 10);
+			var thisType:String = "redfish";
+			if (thisRand >= 9) {
 				thisType = "yellowfish";
+			} else if (thisRand >= 7) {
+				thisType = "bluefish";
+			} else if (thisRand >= 4) {
+				thisType = "greenfish";
 			}
 				
 			var newFish:Fish = new Fish(this, FlxMath.rand(0, 800), FlxMath.rand(500, 1000), thisType);
