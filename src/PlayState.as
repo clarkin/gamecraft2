@@ -7,7 +7,6 @@ package
  
 	public class PlayState extends FlxState
 	{
-		[Embed(source = "../assets/Venue_on_the_Beach.ttf", fontFamily = "Venue", embedAsCFF = "false")] public	var	FontVenue:String;
 		[Embed(source = "../assets/sky.png")] private var skyPNG:Class;
 		[Embed(source = "../assets/sea.png")] private var seaPNG:Class;
 		
@@ -21,10 +20,13 @@ package
 		private var bird:Bird;
 		private var sky:FlxSprite;
 		private var sea:FlxSprite;
+		
 		private var fishGroup:FlxGroup;
 		private var maxFish:int = 200;
 		private var bubbleGroup:FlxGroup;
 		private var maxBubbles:int = 1000;
+		private var popupTextGroup:FlxGroup;
+		private var maxPopupText:int = 200;
 		
 		private var fishTimer:Number = 0;
 		private var GUI:FlxGroup;
@@ -73,10 +75,18 @@ package
 				bubble.kill();
 				bubbleGroup.add(bubble);
 			}
+			popupTextGroup = new FlxGroup(maxPopupText);
+			for (i = 0; i < maxPopupText; i++)
+			{
+				var popupText:PopupText = new PopupText(0, 0);
+				
+				popupText.kill();
+				popupTextGroup.add(popupText);
+			}
 			
 			GUI = new FlxGroup();
 			textScore = new FlxText(600, 0, 200, "Score: 0", false);
-			textScore.setFormat(null, 24, 0xFFCCCCFF, "left", 0xFF000000);
+			textScore.setFormat(null, 24, 0xFFFFFFCC, "left", 0xFF000000);
 			textScore.scrollFactor.x = textScore.scrollFactor.y = 0;
 			GUI.add(textScore);
 			
@@ -85,6 +95,7 @@ package
 			add(fishGroup);
 			add(bubbleGroup);
 			add(bird);
+			add(popupTextGroup);
 			add(GUI);
 			
 			FlxG.camera.follow(bird);
@@ -111,8 +122,6 @@ package
 		}
 		
 		public function addBubble(X:Number = 0, Y:Number = 0):void {
-			
-			//bubbleGroup.add(new Bubble(X, Y));
 			var newBubble:Bubble = bubbleGroup.recycle(Bubble) as Bubble;
 			X += FlxMath.rand( -10, 10);
 			Y += FlxMath.rand( -10, 10);
@@ -150,13 +159,21 @@ package
 				for (var i:int = 0; i <= randbubbles; i++) {
 					addBubble(fish.x, fish.y);
 				}
-				score += fish.value;
+				
+				addPopupText(fish.x, fish.y, fish.value.toString());
 				fish.kill();
 				chompSound.play();
+				score += fish.value;
 				textScore.text = "Score: " + score;
 			} else {
 				fish.startMove(0.2);
 			}
+		}
+		
+		private function addPopupText(X:Number, Y:Number, newtext:String):void {
+			var newPopupText:PopupText = popupTextGroup.recycle(PopupText) as PopupText;
+			newPopupText.text = newtext;
+			newPopupText.reset(X, Y);
 		}
 		
 		private function checkSkySea():void {
