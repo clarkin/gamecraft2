@@ -13,9 +13,11 @@ package
 		[Embed(source = "../assets/splash.wav", mimeType = "application/octet-stream")] private const SplashWAV:Class;
 		[Embed(source = "../assets/caw.wav", mimeType = "application/octet-stream")] private const CawWAV:Class;
 		[Embed(source = "../assets/chomp.wav", mimeType = "application/octet-stream")] private const ChompWAV:Class;
+		[Embed(source = "../assets/sadtrombone.wav", mimeType = "application/octet-stream")] private const TromboneWAV:Class;
 		public var splashSound:WavSound;
 		public var cawSound:WavSound;
 		public var chompSound:WavSound;
+		public var tromboneSound:WavSound;
 				
 		private var bird:Bird;
 		private var sky:FlxSprite;
@@ -32,8 +34,8 @@ package
 		private var GUI:FlxGroup;
 		private var textScore:FlxText;
 		private var score:Number = 0;
-		
-		
+		private var paused:Boolean = false;
+		private var resetDelay:Number = 10;
 		
 		override public function create():void
 		{
@@ -107,18 +109,20 @@ package
 			splashSound = new WavSound(new SplashWAV() as ByteArray);
 			cawSound = new WavSound(new CawWAV() as ByteArray);
 			chompSound = new WavSound(new ChompWAV() as ByteArray);
+			tromboneSound = new WavSound(new TromboneWAV() as ByteArray);
 		}
 		
 		override public function update():void
 		{
-			
-			generateFish();
-			checkSkySea();
-			checkControls();
-			FlxG.collide(fishGroup);
-			FlxG.collide(fishGroup, bird, birdEatsFish);
-			
-			super.update();
+			if (!paused) {
+				generateFish();
+				checkSkySea();
+				checkControls();
+				FlxG.collide(fishGroup);
+				FlxG.collide(fishGroup, bird, birdEatsFish);
+				
+				super.update();
+			} 			
 		}
 		
 		public function addBubble(X:Number = 0, Y:Number = 0):void {
@@ -154,7 +158,11 @@ package
 		}
 		
 		private function birdEatsFish(fish:Fish, bird:Bird):void {
-			if (bird.is_diving) {
+			if (fish.type == "yellowfish") {
+				paused = true;
+				tromboneSound.play();
+				FlxG.fade(0xFF000000, 5, finishedFade);
+			} else if (bird.is_diving) {
 				var randbubbles:int = FlxMath.rand(0, 6);
 				for (var i:int = 0; i <= randbubbles; i++) {
 					addBubble(fish.x, fish.y);
@@ -168,6 +176,10 @@ package
 			} else {
 				fish.startMove(0.2);
 			}
+		}
+		
+		private function finishedFade():void {
+			FlxG.switchState(new MenuState);
 		}
 		
 		private function addPopupText(X:Number, Y:Number, newtext:String):void {

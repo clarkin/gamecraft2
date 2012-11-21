@@ -18,6 +18,7 @@ package
 		private var moveTimer:Number = 0;
 		private var blinkTimer:Number = 0;
 		public var value:int = 1;
+		public var type:String = "";
 		
 		private var _playstate:PlayState;
 		
@@ -61,6 +62,7 @@ package
 			}
 			
 			elasticity = 0.6;
+			this.type = type;
 			
 			var randnum:int = Math.floor(Math.random() * 4) - 4;
 			moveTimer = blinkTimer = randnum;
@@ -69,7 +71,7 @@ package
 				facing = LEFT;
 			else 
 				facing = RIGHT;
-			
+				
 			play("appear");
 		}
 		
