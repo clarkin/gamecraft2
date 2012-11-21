@@ -24,7 +24,7 @@ package
 		private var sea:FlxSprite;
 		
 		private var fishGroup:FlxGroup;
-		private var maxFish:int = 200;
+		private var maxFish:int = 80;
 		private var bubbleGroup:FlxGroup;
 		private var maxBubbles:int = 1000;
 		private var popupTextGroup:FlxGroup;
@@ -87,8 +87,8 @@ package
 			}
 			
 			GUI = new FlxGroup();
-			textScore = new FlxText(600, 0, 200, "Score: 0", false);
-			textScore.setFormat(null, 24, 0xFFFFFFCC, "left", 0xFF000000);
+			textScore = new FlxText(600, 0, 200, "Score: 0");
+			textScore.setFormat("system", 20, 0xFFFFFFCC, "left", 0xFF000000);
 			textScore.scrollFactor.x = textScore.scrollFactor.y = 0;
 			GUI.add(textScore);
 			

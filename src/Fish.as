@@ -64,7 +64,7 @@ package
 			elasticity = 0.6;
 			this.type = type;
 			
-			var randnum:int = Math.floor(Math.random() * 4) - 4;
+			var randnum:int = Math.floor(Math.random() * 4) + 1;
 			moveTimer = blinkTimer = randnum;
 			
 			if (FlxMath.rand(1, 3) == 1)
@@ -133,8 +133,12 @@ package
 		
 		private function checkBounds():void {
 			if (y < 500) {
-				y = 500;
-			} else if (y > FlxG.worldBounds.height - this.height) {
+				acceleration.y = 600;
+			} else {
+				acceleration.y = 0;
+			}
+			
+			if (y > FlxG.worldBounds.height - this.height) {
 				y = FlxG.worldBounds.height - this.height;
 			}
 				

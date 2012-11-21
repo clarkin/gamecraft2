@@ -15,15 +15,15 @@ package
 		{
 			FlxG.mouse.hide();
 			
-			var title:FlxText = new FlxText(0, 100, 800, "Seabird Plunge", true);
+			var title:FlxText = new FlxText(0, 30, 800, "Seabird Plunge", true);
 			title.setFormat("Venue", 100, 0xFF3333CC, "center");
 			
-			var playback:FlxButtonPlus = new FlxButtonPlus(100, 300, startGame, null, "Hit SPACE to Start");
+			var playback:FlxButtonPlus = new FlxButtonPlus(100, 200, startGame, null, "Hit SPACE to Start");
 			playback.screenCenter();
 
 			
-			var instructions:FlxText = new FlxText(0, 500, 800, "Tap SPACE to flap your wings. LEFT/RIGHT to turn. Hold SPACE to dive.", true);
-			instructions.setFormat("Venue", 20, 0xFF3333CC, "center");
+			var instructions:FlxText = new FlxText(50, 500, 800, "Tap SPACE to flap your wings. Hold SPACE to dive. LEFT/RIGHT to turn.\n\nEat fish.. except YELLOW ones!", true);
+			instructions.setFormat("system", 16, 0xFFFFFFCC, "left");
 			
 			add(title);
 			add(instructions);

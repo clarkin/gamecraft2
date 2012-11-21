@@ -120,9 +120,9 @@ package
 					if (in_sky) {
 						velocity.y -= FLAP_Y * depthModifier;
 						if (facing == LEFT)
-							velocity.x -= FLAP_X * depthModifier;
+							velocity.x -= FLAP_X;
 						else
-							velocity.x += FLAP_X * depthModifier;
+							velocity.x += FLAP_X;
 					} else {
 						velocity.y -= FLAP_Y / 2;
 						_playstate.addBubble(x, y);
